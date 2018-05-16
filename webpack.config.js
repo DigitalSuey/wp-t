@@ -1,39 +1,12 @@
-const HtmlWebPackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const merge = require('webpack-merge');
 
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader'
-        }
-      },
-      {
-        test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader',
-            options: { minimize: true }
-          }
-        ]
-      },
-      {
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader']
-      }
-    ]
-  },
-  plugins: [
-    new HtmlWebPackPlugin({
-      template: './src/index.html',
-      filename: './index.html'
-    }),
-    new MiniCssExtractPlugin({
-      filename: '[name].css',
-      chunkFilename: '[id].css'
-    })
-  ]
+module.exports = (env, { mode = 'developent' }) => {
+  const common = require('./config/webpack.common.js');
+
+  const config =
+    mode === 'production'
+      ? require('./config/webpack.production.js')
+      : require('./config/webpack.development.js');
+
+  return merge({ mode, context: __dirname }, common, config);
 };
