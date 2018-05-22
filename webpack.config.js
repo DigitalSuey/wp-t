@@ -1,4 +1,5 @@
 const merge = require('webpack-merge');
+const path = require('path');
 
 module.exports = (env, { mode = 'developent' }) => {
   const common = require('./config/webpack.common.js');
@@ -8,5 +9,14 @@ module.exports = (env, { mode = 'developent' }) => {
       ? require('./config/webpack.production.js')
       : require('./config/webpack.development.js');
 
-  return merge({ mode, context: __dirname }, common, config);
+  return merge(
+    {
+      mode,
+      resolve: {
+        modules: [path.resolve(__dirname, 'src'), 'node_modules']
+      }
+    },
+    common,
+    config
+  );
 };

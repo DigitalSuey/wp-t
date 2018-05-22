@@ -1,6 +1,13 @@
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const merge = require('webpack-merge');
-const javascriptLoader = require('./loaders/javascript');
-const htmlLoader = require('./loaders/html');
 
-module.exports = merge([htmlLoader(), javascriptLoader()]);
+const htmlLoader = require('./loaders/html');
+const imageLoader = require('./loaders/image');
+const javascriptLoader = require('./loaders/javascript');
+const svgLoader = require('./loaders/svg');
+
+module.exports = merge([
+  htmlLoader(),
+  javascriptLoader(),
+  imageLoader({}, { exclude: /index\.html$/ }, {}),
+  svgLoader()
+]);
